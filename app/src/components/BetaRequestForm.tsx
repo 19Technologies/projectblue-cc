@@ -3,8 +3,12 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const BetaRequestForm = () => {
-  const [expanded, setExpanded] = useState(false);
+interface BetaRequestFormProps {
+  startExpanded?: boolean;
+}
+
+export const BetaRequestForm = ({ startExpanded = false }: BetaRequestFormProps) => {
+  const [expanded, setExpanded] = useState(startExpanded);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -93,13 +97,15 @@ export const BetaRequestForm = () => {
         <button type="submit" disabled={busy} className="pb-action-btn">
           {busy ? "Sending…" : "Request invite"}
         </button>
-        <button
-          type="button"
-          onClick={() => setExpanded(false)}
-          className="pb-shuffle"
-        >
-          Cancel
-        </button>
+        {!startExpanded && (
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            className="pb-shuffle"
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </form>
   );
