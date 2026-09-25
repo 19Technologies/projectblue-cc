@@ -60,7 +60,7 @@ export const Welcome = () => {
   return (
     <div className="pb-welcome">
       <div className="pb-topbar" aria-hidden />
-      <Header brandAsLink={false} />
+      <Header />
       <BetaBanner />
 
       <main id="main" className="pb-welcome-main">

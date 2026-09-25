@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BetaRequestForm } from "./BetaRequestForm";
 import { WordMark } from "./BrandMark";
 import { Footer } from "./Footer";
@@ -43,8 +44,9 @@ const ROOM_DETAILS: [string, string][] = [
 ];
 
 /**
- * The projectblue.cc apex during the private beta. The real app lives on
- * beta.projectblue.cc; this page explains it and collects access requests.
+ * The projectblue.cc front page during the private beta: explains the
+ * product and collects access requests. Invited people start rooms at
+ * /start; beta.projectblue.cc redirects here (see next.config.ts).
  */
 export const ApexLanding = () => {
   return (
@@ -89,6 +91,12 @@ export const ApexLanding = () => {
                   How it works
                 </a>
               </div>
+              <p className="pb-apex-invited">
+                Already have an invite?{" "}
+                <Link href="/start" className="pb-shuffle">
+                  Start a room
+                </Link>
+              </p>
             </div>
           </div>
         </section>

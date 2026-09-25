@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 
   const codeBlock = betaCode?.trim()
-    ? `\n\n---\nYour beta invite code: ${betaCode.trim()}\n\nEnter it at https://beta.projectblue.cc to get started.\n---`
+    ? `\n\n---\nYour beta invite code: ${betaCode.trim()}\n\nEnter it at https://projectblue.cc/start to get started.\n---`
     : "";
 
   const textBody = `${message.trim()}${codeBlock}`;
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
           <div style="background:rgba(91,123,196,0.12);border:1px solid rgba(91,123,196,0.3);border-radius:8px;padding:20px 24px;text-align:center;">
             <p style="margin:0 0 8px;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(236,240,255,0.5);">Your beta invite code</p>
             <p style="margin:0 0 16px;font-size:1.75rem;font-family:'SF Mono','JetBrains Mono','Menlo',monospace;letter-spacing:0.1em;color:#ECF0FF;font-weight:600;">${betaCode.trim().replace(/</g, "&lt;")}</p>
-            <a href="https://beta.projectblue.cc" style="display:inline-block;background:#5B7BC4;color:#050810;text-decoration:none;padding:10px 24px;border-radius:9999px;font-size:0.875rem;font-weight:600;">Enter code →</a>
+            <a href="https://projectblue.cc/start" style="display:inline-block;background:#5B7BC4;color:#050810;text-decoration:none;padding:10px 24px;border-radius:9999px;font-size:0.875rem;font-weight:600;">Enter code →</a>
           </div>
         </td></tr>`
             : ""

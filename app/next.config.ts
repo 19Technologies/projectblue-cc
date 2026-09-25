@@ -17,7 +17,16 @@ const nextConfig: NextConfig = {
     };
   },
   async redirects() {
-    return [];
+    return [
+      // projectblue.cc is the one front door. Temporary (307) so browsers
+      // don't cache it forever if beta.* ever needs to come back.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "beta.projectblue.cc" }],
+        destination: "https://projectblue.cc/:path*",
+        permanent: false,
+      },
+    ];
   },
 };
 

@@ -108,7 +108,7 @@ export default function AdminEmailPage() {
             style={{ fontFamily: '"SF Mono","JetBrains Mono","Menlo","Consolas",monospace', letterSpacing: "0.06em" }}
           />
           <p style={{ fontSize: "0.75rem", color: "var(--pb-text-soft)", marginTop: "0.4rem" }}>
-            When filled, a styled code block is appended to the email with a link to beta.projectblue.cc.
+            When filled, a styled code block is appended to the email with a link to projectblue.cc/start.
           </p>
 
           <div className="pb-action-row" style={{ marginTop: "1.75rem" }}>

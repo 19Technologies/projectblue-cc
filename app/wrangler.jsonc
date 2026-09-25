@@ -39,9 +39,10 @@
 
   /*
     Custom domains — Cloudflare auto-provisions the DNS record + SSL cert
-    for each. The apex serves the minimal beta landing (ApexLanding);
-    beta.* serves the gated app; admin.* serves the dashboard. All three
-    are the one projectblue-app Worker, split by Host header in page.tsx.
+    for each. The apex serves the landing (/) and the app (/start,
+    /room/*); beta.* redirects to the apex; admin.* serves the dashboard.
+    All three are the one projectblue-app Worker, split by Host header
+    in next.config.ts.
   */
   "routes": [
     { "pattern": "projectblue.cc", "custom_domain": true },
