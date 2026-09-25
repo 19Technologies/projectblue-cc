@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
     return [
       // projectblue.cc is the one front door. Temporary (307) so browsers
       // don't cache it forever if beta.* ever needs to come back.
+      // The root needs its own rule: on Cloudflare (OpenNext) an empty
+      // :path* is left in the destination as literal ":path*".
+      {
+        source: "/",
+        has: [{ type: "host", value: "beta.projectblue.cc" }],
+        destination: "https://projectblue.cc/",
+        permanent: false,
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: "beta.projectblue.cc" }],
