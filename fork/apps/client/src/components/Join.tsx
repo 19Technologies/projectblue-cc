@@ -101,7 +101,6 @@ export const Join = () => {
             >
               <motion.div className="relative flex items-center justify-center">
                 <motion.div className="size-2 bg-green-500 rounded-full" />
-                <motion.div className="absolute size-2.5 bg-green-500/30 rounded-full animate-ping" />
               </motion.div>
               <span className="text-xs text-neutral-500 ml-0.5">
                 {numActiveUsers} {numActiveUsers === 1 ? "person" : "people"} listening now

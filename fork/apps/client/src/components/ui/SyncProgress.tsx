@@ -21,17 +21,10 @@ const WsStatusDot = ({ wsReadyState }: { wsReadyState: number }) => {
 
   return (
     <span className="absolute top-1/2 -translate-y-1/2 -left-5 flex size-2">
-      {wsReadyState <= 1 && (
-        <span
-          className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-          style={{ backgroundColor: `rgb(${rgb})` }}
-        />
-      )}
       <span
         className="relative inline-flex size-2 rounded-full"
         style={{
           backgroundColor: `rgb(${rgb})`,
-          boxShadow: `0 0 6px 1px rgba(${rgb},0.5)`,
           transition: "background-color 0.4s ease, box-shadow 0.4s ease",
         }}
       />

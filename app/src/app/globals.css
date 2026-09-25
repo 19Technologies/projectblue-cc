@@ -482,22 +482,6 @@ h1, h2, h3, h4, h5, h6, button {
 }
 .pb-room-dot.is-live {
   background: #10B981; /* Emerald green for live status */
-  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-  animation: pb-pulse-green 2s infinite;
-}
-@keyframes pb-pulse-green {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-  }
 }
 .pb-room-status {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -1260,11 +1244,6 @@ h1, h2, h3, h4, h5, h6, button {
 }
 .pb-now-dot.is-playing {
   background: var(--pb-accent);
-  animation: pb-now-pulse 1.6s ease-in-out infinite;
-}
-@keyframes pb-now-pulse {
-  0%, 100% { opacity: 0.6; }
-  50%      { opacity: 1; }
 }
 
 /* Queue list */
