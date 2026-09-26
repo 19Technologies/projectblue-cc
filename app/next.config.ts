@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
+// Pin the project root to this folder. Left to guess, Next picks the
+// highest lockfile it finds, and a stray one in the home directory made it
+// watch all of ~ (dev then served stale CSS).
+const projectRoot = __dirname;
+
 const nextConfig: NextConfig = {
+  turbopack: { root: projectRoot },
+  outputFileTracingRoot: projectRoot,
   async rewrites() {
     return {
       // Host routing — replaces what src/proxy.ts used to do.
