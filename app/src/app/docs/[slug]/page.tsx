@@ -22,7 +22,7 @@ export default async function DocPage({ params }: Props) {
   if (!page) notFound();
   const html = renderMarkdown(page.body);
   return (
-    <PublicShell kicker="Docs" title={page.title}>
+    <PublicShell icon="book" tone="tide" kicker="Docs" title={page.title}>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </PublicShell>
   );

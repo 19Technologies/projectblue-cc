@@ -9,10 +9,10 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { BetaBanner } from "./BetaBanner";
 import { BetaRequestForm } from "./BetaRequestForm";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { GlassIcon } from "./LiquidGlass";
 
 export const Welcome = () => {
   const router = useRouter();
@@ -58,20 +58,21 @@ export const Welcome = () => {
   };
 
   return (
-    <div className="pb-welcome">
-      <div className="pb-topbar" aria-hidden />
+    <div className="pb-welcome pb-shell">
       <Header />
-      <BetaBanner />
 
-      <main id="main" className="pb-welcome-main">
-        <h1 className="pb-welcome-headline">
-          Listen <span className="pb-emph">together</span>.<br />
-          Even when you&apos;re apart.
-        </h1>
+      <main id="main" className="pb-shell-main">
+        <div className="pb-shell-head">
+          <GlassIcon icon="door" tone="tide" size="lg" />
+          <p className="pb-lg-eyebrow">Start a room</p>
+          <h1 className="pb-shell-title">
+            Listen together.
+            <br />
+            Even when you&apos;re apart<span className="pb-lg-dot">.</span>
+          </h1>
+        </div>
 
-        <hr className="pb-welcome-rule" />
-
-        <section className="pb-welcome-actions">
+        <div className="pb-lg-card pb-shell-card pb-shell-card--narrow">
           <form onSubmit={onSubmit} className="pb-action-form">
             <label htmlFor="room-code" className="pb-action-label">
               Room code
@@ -105,15 +106,17 @@ export const Welcome = () => {
               <button
                 type="button"
                 onClick={onShuffle}
-                className="pb-shuffle"
+                className="pb-lg-pill pb-lg-pill--lg"
               >
                 Shuffle code
               </button>
             </div>
           </form>
-        </section>
+        </div>
 
-        <BetaRequestForm />
+        <div className="pb-shell-after">
+          <BetaRequestForm />
+        </div>
       </main>
 
       <Footer />

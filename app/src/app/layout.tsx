@@ -1,6 +1,6 @@
 import { FaviconLinks } from "@/components/FaviconLinks";
 import type { Metadata, Viewport } from "next";
-import { Archivo, EB_Garamond, Inter } from "next/font/google";
+import { Archivo, Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -8,13 +8,6 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-});
-
-const garamond = EB_Garamond({
-  variable: "--font-garamond",
-  subsets: ["latin"],
-  display: "swap",
-  style: ["normal", "italic"],
 });
 
 // Wide bold grotesk for the Project Blue word-mark — a free, reliable
@@ -42,31 +35,25 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F2F5FD" },
-    { media: "(prefers-color-scheme: dark)", color: "#0A0D1A" },
-  ],
+  themeColor: "#050506",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <FaviconLinks />
-        {/* Boot the saved theme (or prefers-color-scheme) before paint
-            so we don't flash the wrong palette. The landing is dark-first:
-            light only if the visitor chose it. */}
+        {/* Boot the saved theme before paint so we don't flash the wrong
+            palette. Dark-first everywhere; light only if the visitor chose it. */}
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `
               try {
                 var t = localStorage.getItem('pb-theme');
-                if (!t && location.pathname === '/') t = 'dark';
-                if (!t && window.matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
-                if (!t) t = 'light';
+                if (t !== 'light') t = 'dark';
                 document.documentElement.setAttribute('data-theme', t);
               } catch (_) {}
             `,
@@ -75,11 +62,11 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${garamond.variable} ${archivo.variable}`}
+        className={`${inter.variable} ${archivo.variable}`}
       >
         <a href="#main" className="pb-skip">Skip to main content</a>
         {children}
-        <Toaster position="bottom-center" />
+        <Toaster position="bottom-center" theme="dark" />
       </body>
     </html>
   );

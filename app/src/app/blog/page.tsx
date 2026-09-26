@@ -8,7 +8,7 @@ export const metadata = { title: "Blog" };
 export default async function BlogIndexPage() {
   const posts = await listPages("blog");
   return (
-    <PublicShell
+    <PublicShell icon="news" tone="sunset"
       kicker="Project Blue"
       title={<>The <span className="pb-emph">blog</span>.</>}
     >

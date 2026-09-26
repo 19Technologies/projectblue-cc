@@ -3,6 +3,7 @@
 import { WordMark } from "@/components/BrandMark";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface AdminNavProps {
   /** Set to any string to show a back arrow. Null/undefined hides it (dashboard). */
@@ -41,6 +42,7 @@ export function AdminNav({ page, extra }: AdminNavProps) {
         <Link href="/admin" className="pb-nav-link">Dashboard</Link>
         {extra}
         <span className="pb-admin-pill">ADMIN</span>
+        <ThemeToggle />
       </nav>
     </header>
   );

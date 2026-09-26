@@ -1,32 +1,48 @@
 import type { ReactNode } from "react";
-import { BetaBanner } from "./BetaBanner";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { GlassIcon, type GlassIconName, type GlassTone } from "./LiquidGlass";
 
 interface PublicShellProps {
   kicker?: string;
   title: ReactNode;
+  icon?: GlassIconName;
+  tone?: GlassTone;
+  /** "narrow" for forms, "wide" (default) for reading. */
+  width?: "narrow" | "wide";
+  /** Hide the start/invite actions in the header. */
+  minimalHeader?: boolean;
   children: ReactNode;
 }
 
 /**
- * Shared chrome for non-welcome public pages: /signin, /signup,
- * /forgot-password, /terms, /privacy, /blog, /docs, single posts/docs.
- *
- * Welcome uses its own shell because it owns the headline scale.
+ * Shared chrome for the public pages that aren't the landing: /signin,
+ * /signup, /forgot-password, /terms, /privacy, /blog, /docs and single
+ * posts/docs. A glass icon, a kicker and the title, then the content in
+ * a frosted card.
  */
-export const PublicShell = ({ kicker, title, children }: PublicShellProps) => {
+export const PublicShell = ({
+  kicker,
+  title,
+  icon,
+  tone = "ink",
+  width = "wide",
+  minimalHeader = false,
+  children,
+}: PublicShellProps) => {
   return (
-    <div className="pb-welcome">
-      <div className="pb-topbar" aria-hidden />
-      <Header />
-      <BetaBanner />
+    <div className="pb-welcome pb-shell">
+      <Header minimal={minimalHeader} />
 
-      <main id="main" className="pb-welcome-main pb-legal">
-        {kicker && <p className="pb-legal-updated">{kicker}</p>}
-        <h1 className="pb-welcome-headline pb-legal-title">{title}</h1>
-        <hr className="pb-welcome-rule" />
-        <div className="pb-legal-body">{children}</div>
+      <main id="main" className="pb-shell-main">
+        <div className="pb-shell-head">
+          {icon && <GlassIcon icon={icon} tone={tone} size="lg" />}
+          {kicker && <p className="pb-lg-eyebrow">{kicker}</p>}
+          <h1 className="pb-shell-title">{title}</h1>
+        </div>
+        <div className={`pb-lg-card pb-shell-card pb-shell-card--${width}`}>
+          <div className="pb-legal-body">{children}</div>
+        </div>
       </main>
 
       <Footer />

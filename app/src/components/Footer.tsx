@@ -3,7 +3,6 @@
 import { SOCIAL_LINKS } from "@/constants";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ThemeToggle } from "./ThemeToggle";
 
 /* Tiny inline social glyphs — no icon-pack dependency */
 const InstagramGlyph = () => (
@@ -49,10 +48,9 @@ type LinkMap = Record<string, string>;
 interface FooterProps {
   /** Small leading text, e.g. a version stamp. */
   note?: React.ReactNode;
-  showThemeToggle?: boolean;
 }
 
-export const Footer = ({ note, showThemeToggle = true }: FooterProps) => {
+export const Footer = ({ note = "v0.1 beta · projectblue.cc" }: FooterProps) => {
   // Hydrate with the build-time defaults so the first paint isn't empty;
   // /api/links overrides with admin-edited values when it arrives.
   const [links, setLinks] = useState<LinkMap>(() => ({ ...SOCIAL_LINKS }));
@@ -78,7 +76,7 @@ export const Footer = ({ note, showThemeToggle = true }: FooterProps) => {
 
   return (
     <footer className="pb-welcome-footer">
-      {note && <span className="pb-footer-note">{note}</span>}
+      <span className="pb-footer-note">{note}</span>
       <Link href="/terms" className="pb-footer-link">
         Terms
       </Link>
@@ -103,9 +101,6 @@ export const Footer = ({ note, showThemeToggle = true }: FooterProps) => {
           <span className="pb-social-label">{s.label}</span>
         </a>
       ))}
-
-      <span className="pb-footer-spacer" aria-hidden />
-      {showThemeToggle && <ThemeToggle />}
     </footer>
   );
 };

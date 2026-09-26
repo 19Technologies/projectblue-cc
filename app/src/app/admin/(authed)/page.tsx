@@ -1,4 +1,5 @@
 import { WordMark } from "@/components/BrandMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 
 export default function AdminDashboardPage() {
@@ -19,6 +20,7 @@ export default function AdminDashboardPage() {
               Sign out
             </button>
           </form>
+          <ThemeToggle />
         </nav>
       </header>
 

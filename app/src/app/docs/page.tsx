@@ -8,7 +8,7 @@ export const metadata = { title: "Docs" };
 export default async function DocsIndexPage() {
   const docs = await listPages("doc");
   return (
-    <PublicShell
+    <PublicShell icon="book" tone="tide"
       kicker="Project Blue"
       title={<><span className="pb-emph">Documentation</span>.</>}
     >

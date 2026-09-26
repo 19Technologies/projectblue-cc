@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { ThemeToggle } from "./ThemeToggle";
 
 const ROOMS_WS =
   process.env.NEXT_PUBLIC_ROOMS_WS ?? "wss://rooms.projectblue.cc";
@@ -1372,6 +1373,7 @@ export const Room = ({ code }: { code: string }) => {
       <div className="pb-topbar" aria-hidden />
       <header className="pb-welcome-header">
         <WordMark asLink />
+        <span className="pb-lg-spacer" aria-hidden />
         <div className="pb-room-meta">
           <button type="button" onClick={onCopyCode} className="pb-room-code" title="Copy room code">
             {code}
@@ -1381,6 +1383,7 @@ export const Room = ({ code }: { code: string }) => {
             {connected ? `${peers.length || 1} here` : "connecting…"}
           </span>
         </div>
+        <ThemeToggle />
       </header>
 
       {isDesktop ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import { WordMark } from "@/components/BrandMark";
+import { PublicShell } from "@/components/PublicShell";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
@@ -52,53 +52,45 @@ function AdminSignInInner() {
   };
 
   return (
-    <div className="pb-welcome pb-admin-page">
-      <div className="pb-topbar" aria-hidden />
+    <PublicShell
+      icon="lock"
+      tone="ink"
+      width="narrow"
+      minimalHeader
+      kicker="Restricted area"
+      title={<>Sign in to admin<span className="pb-lg-dot">.</span></>}
+    >
+      <form onSubmit={onSubmit} className="pb-form-stack">
+        <label className="pb-action-label" htmlFor="admin-email">Email</label>
+        <input
+          id="admin-email"
+          type="email"
+          autoComplete="email"
+          className="pb-input"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="admin@projectblue.cc"
+        />
 
-      <header className="pb-welcome-header">
-        <WordMark />
-        <span className="pb-admin-pill">ADMIN</span>
-      </header>
+        <label className="pb-action-label" htmlFor="admin-password" style={{ marginTop: "1.25rem" }}>
+          Password
+        </label>
+        <input
+          id="admin-password"
+          type="password"
+          autoComplete="current-password"
+          className="pb-input"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+        />
 
-      <main id="main" className="pb-welcome-main pb-legal">
-        <p className="pb-legal-updated">Restricted area</p>
-        <h1 className="pb-welcome-headline pb-legal-title">
-          Sign in to <span className="pb-emph">admin</span>.
-        </h1>
-        <hr className="pb-welcome-rule" />
-
-        <form onSubmit={onSubmit} className="pb-form-stack">
-          <label className="pb-action-label" htmlFor="admin-email">Email</label>
-          <input
-            id="admin-email"
-            type="email"
-            autoComplete="email"
-            className="pb-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="admin@projectblue.cc"
-          />
-
-          <label className="pb-action-label" htmlFor="admin-password" style={{ marginTop: "1.75rem" }}>
-            Password
-          </label>
-          <input
-            id="admin-password"
-            type="password"
-            autoComplete="current-password"
-            className="pb-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-          />
-
-          <div className="pb-action-row">
-            <button type="submit" disabled={busy} className="pb-action-btn">
-              {busy ? "Signing in…" : "Sign in"}
-            </button>
-          </div>
-        </form>
-      </main>
-    </div>
+        <div className="pb-action-row">
+          <button type="submit" disabled={busy} className="pb-action-btn">
+            {busy ? "Signing in…" : "Sign in"}
+          </button>
+        </div>
+      </form>
+    </PublicShell>
   );
 }

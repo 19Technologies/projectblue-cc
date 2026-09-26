@@ -15,7 +15,7 @@ export default async function PrivacyPage() {
   const html = renderMarkdown(doc.body);
   const updated = new Date(doc.updatedAt).toISOString().slice(0, 10);
   return (
-    <PublicShell kicker={`Last updated · ${updated}`} title={doc.title}>
+    <PublicShell icon="shield" tone="grove" kicker={`Last updated · ${updated}`} title={doc.title}>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </PublicShell>
   );

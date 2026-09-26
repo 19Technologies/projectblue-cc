@@ -1,48 +1,60 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────────
-   Project Blue design tokens.
+   Project Blue design tokens — liquid glass.
 
-   Influences (in order of weight):
-     1. gov.uk     — decisive type hierarchy, black + white core with one accent.
-     2. Mont Blanc — monolithic stacked word-mark, considered.
-     3. cosmos.so  — paper-blue warmth, italic display moments,
-                     calm 200ms cubic-bezier transitions.
-
-   Non-goals: deep-sea descent metaphors, dark-Beatsync gradients,
-   neon, busy chrome.
+   A near-black dot-grid canvas (a light variant when the visitor picks
+   it), Inter throughout, frosted cards, pill buttons, and liquid glass
+   on the icons and the nav capsule (@samasante/liquid-glass). One blue
+   accent, used sparingly. Dark-first: see the boot script in layout.tsx.
    ────────────────────────────────────────────────────────────── */
 
 :root,
-[data-theme="light"] {
-  --pb-bg:            #F2F5FD; /* paper-blue, not pure white */
-  --pb-text:          #0B0E14;
-  --pb-text-soft:     rgba(11, 14, 20, 0.7);
-  --pb-text-faint:    rgba(11, 14, 20, 0.25);
-  --pb-ink:           #0B1A3F; /* dark blue, reads near-black on white */
-  --pb-on-ink:        #FFFFFF;
-  --pb-ink-shadow:    rgba(11, 26, 63, 0.65);
-  --pb-bar:           #0B1A3F; /* gov.uk-style 10px top band */
-  --pb-muted:         #5F6B7A;
-  --pb-accent:        #4C6CB3;
-  --pb-accent-strong: #2E4A8F;
-  --pb-hairline:      rgba(11, 14, 20, 0.15);
+[data-theme="dark"] {
+  --pb-bg:            #050506;
+  --pb-text:          #F4F4F6;
+  --pb-text-soft:     rgba(244, 244, 246, 0.64);
+  --pb-text-faint:    rgba(244, 244, 246, 0.4);
+  --pb-ink:           #F4F4F6; /* solid fills: light pills on the dark canvas */
+  --pb-on-ink:        #0A0A0B;
+  --pb-ink-shadow:    rgba(0, 0, 0, 0.55);
+  --pb-bar:           #5E86F0;
+  --pb-muted:         #8A8A93;
+  --pb-accent:        #5E86F0;
+  --pb-accent-strong: #8AA8F5;
+  --pb-hairline:      rgba(255, 255, 255, 0.09);
+  --pb-dot:           rgba(255, 255, 255, 0.08);
+  --pb-card:          rgba(22, 22, 26, 0.62);
+  --pb-capsule:       rgba(24, 24, 28, 0.55);
+  --pb-edge:          rgba(255, 255, 255, 0.11);
+  --pb-highlight:     rgba(255, 255, 255, 0.08);
+  --pb-field:         rgba(255, 255, 255, 0.05);
+  --pb-shadow:        0 24px 60px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-[data-theme="dark"] {
-  --pb-bg:            #0A0D1A; /* deep-warm-black */
-  --pb-text:          #ECF0FF;
-  --pb-text-soft:     rgba(236, 240, 255, 0.72);
-  --pb-text-faint:    rgba(236, 240, 255, 0.28);
-  --pb-ink:           #ECF0FF; /* cream "ink" inverted for dark mode */
-  --pb-on-ink:        #050810;
-  --pb-ink-shadow:    rgba(0, 0, 0, 0.55);
-  --pb-bar:           #4C6CB3; /* brand accent keeps the band visible */
-  --pb-muted:         #7080AA;
-  --pb-accent:        #5B7BC4;
-  --pb-accent-strong: #8AA8DE;
-  --pb-hairline:      rgba(236, 240, 255, 0.18);
+[data-theme="light"] {
+  --pb-bg:            #F4F4F5;
+  --pb-text:          #0A0A0B;
+  --pb-text-soft:     rgba(10, 10, 11, 0.62);
+  --pb-text-faint:    rgba(10, 10, 11, 0.44);
+  --pb-ink:           #0A0A0B;
+  --pb-on-ink:        #F4F4F6;
+  --pb-ink-shadow:    rgba(15, 20, 40, 0.3);
+  --pb-bar:           #3E63C9;
+  --pb-muted:         #6B6B73;
+  --pb-accent:        #3E63C9;
+  --pb-accent-strong: #2E4A8F;
+  --pb-hairline:      rgba(0, 0, 0, 0.08);
+  --pb-dot:           rgba(0, 0, 0, 0.1);
+  --pb-card:          rgba(255, 255, 255, 0.66);
+  --pb-capsule:       rgba(255, 255, 255, 0.6);
+  --pb-edge:          rgba(0, 0, 0, 0.08);
+  --pb-highlight:     rgba(255, 255, 255, 0.9);
+  --pb-field:         rgba(0, 0, 0, 0.04);
+  --pb-shadow:        0 24px 60px rgba(15, 20, 40, 0.12), 0 2px 8px rgba(15, 20, 40, 0.06);
 }
+
+:root { --pb-gutter: clamp(1rem, 4vw, 2rem); }
 
 @theme inline {
   --color-pb-bg:     var(--pb-bg);
@@ -50,7 +62,6 @@
   --color-pb-ink:    var(--pb-ink);
   --color-pb-accent: var(--pb-accent);
   --font-sans:       var(--font-inter);
-  --font-display:    var(--font-garamond);
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -58,20 +69,27 @@
    ────────────────────────────────────────────────────────────── */
 html, body { background: var(--pb-bg); color: var(--pb-text); }
 
+/* Big screens: scale the whole UI up rather than leave it marooned */
+@media (min-width: 1920px) { html { font-size: 112.5%; } }
+@media (min-width: 2560px) { html { font-size: 131.25%; } }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
 body {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   min-height: 100dvh;
 }
 
 h1, h2, h3, h4, h5, h6, button {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: inherit;
   font-weight: 700;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
 }
 
-::selection { background: var(--pb-accent); color: #FFFFFF; }
+::selection { background: rgba(94, 134, 240, 0.4); color: inherit; }
 
 /* Skip link — visible on focus */
 .pb-skip {
@@ -81,7 +99,7 @@ h1, h2, h3, h4, h5, h6, button {
   background: var(--pb-ink);
   color: var(--pb-on-ink);
   padding: 0.6rem 1rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.9rem;
   text-decoration: none;
@@ -118,7 +136,7 @@ h1, h2, h3, h4, h5, h6, button {
 }
 
 .pb-nav-link {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
@@ -165,10 +183,10 @@ h1, h2, h3, h4, h5, h6, button {
   flex-direction: column;
   align-items: flex-start;
   color: var(--pb-text);
-  font-family: var(--font-archivo), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-archivo), var(--font-inter), -apple-system, system-ui, sans-serif;
 }
 .pb-wordmark-line {
-  font-family: var(--font-archivo), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-archivo), var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 800;
   font-size: 1.15rem;
   letter-spacing: 0.04em;
@@ -197,7 +215,7 @@ h1, h2, h3, h4, h5, h6, button {
   flex-wrap: wrap;
   align-items: center;
   gap: 1.5rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -226,7 +244,7 @@ h1, h2, h3, h4, h5, h6, button {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -241,25 +259,6 @@ h1, h2, h3, h4, h5, h6, button {
   text-decoration-thickness: 2px;
 }
 
-.pb-theme-toggle {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--pb-text-soft);
-  background: transparent;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
-  text-decoration-thickness: 2px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: color 200ms cubic-bezier(.2, .7, .3, 1);
-}
-.pb-theme-toggle:hover { color: var(--pb-accent-strong); }
 
 @media (max-width: 760px) {
   .pb-welcome-header { padding: 1.75rem 1.5rem 0; }
@@ -291,7 +290,7 @@ h1, h2, h3, h4, h5, h6, button {
 }
 
 .pb-welcome-headline {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: clamp(2.6rem, 7vw, 5.5rem);
   line-height: 0.98;
@@ -302,7 +301,7 @@ h1, h2, h3, h4, h5, h6, button {
 }
 /* Garamond italic emphasis — the cosmos.so magazine moment */
 .pb-welcome-headline .pb-emph {
-  font-family: var(--font-garamond), "EB Garamond", Georgia, serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.005em;
@@ -325,7 +324,7 @@ h1, h2, h3, h4, h5, h6, button {
 
 /* Small-caps metadata stamp — cosmos.so editorial label */
 .pb-action-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
   letter-spacing: 0.22em;
@@ -370,7 +369,7 @@ h1, h2, h3, h4, h5, h6, button {
 }
 
 .pb-action-btn {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--pb-on-ink);
@@ -412,7 +411,7 @@ h1, h2, h3, h4, h5, h6, button {
 }
 
 .pb-shuffle {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
@@ -435,7 +434,7 @@ h1, h2, h3, h4, h5, h6, button {
 /* "Project Blue is in private beta · Request access" — sits below the form */
 .pb-beta-prompt {
   margin-top: 3rem;
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.95rem;
   color: var(--pb-text-soft);
 }
@@ -480,7 +479,7 @@ h1, h2, h3, h4, h5, h6, button {
   background: #10B981; /* Emerald green for live status */
 }
 .pb-room-status {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--pb-text-soft);
@@ -517,7 +516,7 @@ h1, h2, h3, h4, h5, h6, button {
   background: var(--pb-bg);
 }
 .pb-audio-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--pb-text);
@@ -527,7 +526,7 @@ h1, h2, h3, h4, h5, h6, button {
    are pure UI. We don't use an <audio> element because it can't be
    precision-scheduled. */
 .pb-audio-loading {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   color: var(--pb-text-soft);
   font-style: italic;
 }
@@ -559,7 +558,7 @@ h1, h2, h3, h4, h5, h6, button {
   border-color: var(--pb-accent);
 }
 .pb-audio-time {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   font-size: 0.8rem;
   color: var(--pb-text-soft);
@@ -592,14 +591,14 @@ h1, h2, h3, h4, h5, h6, button {
   margin-bottom: 2rem;
 }
 .pb-room-empty-title {
-  font-family: var(--font-garamond), "EB Garamond", Georgia, serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-style: italic;
   font-size: 1.5rem;
   color: var(--pb-text);
   margin-bottom: 0.5rem;
 }
 .pb-room-empty-sub {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   color: var(--pb-text-soft);
 }
 
@@ -618,135 +617,17 @@ h1, h2, h3, h4, h5, h6, button {
 .pb-room-form-row .pb-input { flex: 1; min-width: 16rem; margin-bottom: 0; }
 .pb-room-hint {
   margin-top: 1rem;
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.9rem;
   color: var(--pb-text-soft);
 }
 .pb-room-peers {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.9rem;
   color: var(--pb-text-soft);
   padding-top: 1.25rem;
   margin-top: 1.5rem;
   border-top: 1px solid var(--pb-hairline);
-}
-
-/* gov.uk-style phase banner — thin strip under the header */
-.pb-phase-banner {
-  border-bottom: 1px solid var(--pb-hairline);
-}
-.pb-phase-banner-inner {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0.85rem 2rem;
-  display: flex;
-  align-items: baseline;
-  gap: 0.85rem;
-  flex-wrap: wrap;
-}
-.pb-phase-tag {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 700;
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
-  color: #FFFFFF;
-  background: var(--pb-accent);
-  padding: 0.25rem 0.55rem;
-}
-.pb-phase-text {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 0.9rem;
-  color: var(--pb-text-soft);
-}
-@media (max-width: 760px) {
-  .pb-phase-banner-inner { padding-left: 1.5rem; padding-right: 1.5rem; }
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Beta gate page — large animated welcome + invite-code entry
-   ────────────────────────────────────────────────────────────── */
-.pb-beta-page { /* shares pb-welcome chrome */ }
-
-@keyframes pb-beta-rise {
-  from { opacity: 0; transform: translateY(0.6em); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes pb-beta-italic-rise {
-  from { opacity: 0; transform: translateY(0.6em) skewX(-3deg); }
-  to   { opacity: 1; transform: translateY(0) skewX(0); }
-}
-@keyframes pb-beta-eyebrow-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-.pb-beta-eyebrow {
-  opacity: 0;
-  animation: pb-beta-eyebrow-fade 700ms cubic-bezier(.2,.7,.3,1) 100ms forwards;
-}
-
-.pb-beta-headline {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.6rem, 8.5vw, 6.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.025em;
-  color: var(--pb-text);
-  margin-bottom: 1.5rem;
-  max-width: 16ch;
-  /* "Welcome," part rises first */
-  opacity: 0;
-  animation: pb-beta-rise 900ms cubic-bezier(.2,.7,.3,1) 250ms forwards;
-}
-
-/* "beta tester" italic emphasis rises a beat later, with a softer skew */
-.pb-beta-emph {
-  display: inline-block;
-  opacity: 0;
-  animation: pb-beta-italic-rise 1100ms cubic-bezier(.2,.7,.3,1) 700ms forwards;
-}
-
-.pb-beta-sub {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1.25rem;
-  line-height: 1.55;
-  color: var(--pb-text-soft);
-  max-width: 32rem;
-  margin-bottom: 2.5rem;
-  opacity: 0;
-  animation: pb-beta-rise 800ms cubic-bezier(.2,.7,.3,1) 1100ms forwards;
-}
-
-/* Big bold mono code input — distinct from the room-code input on / */
-.pb-beta-code-input {
-  font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
-  font-weight: 700;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  letter-spacing: 0.12em;
-  color: var(--pb-text);
-  background: transparent;
-  border: 0;
-  border-bottom: 4px solid var(--pb-text);
-  border-radius: 0;
-  padding: 0.5rem 0;
-  outline: none;
-  text-transform: uppercase;
-  text-align: left;
-  width: 100%;
-  max-width: 32rem;
-  caret-color: var(--pb-accent);
-}
-.pb-beta-code-input::placeholder {
-  color: var(--pb-text-faint);
-  font-weight: 700;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pb-beta-eyebrow, .pb-beta-headline, .pb-beta-emph, .pb-beta-sub {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -755,7 +636,7 @@ h1, h2, h3, h4, h5, h6, button {
 .pb-form-stack { display: flex; flex-direction: column; }
 
 .pb-input {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 1.1rem;
   color: var(--pb-text);
   background: transparent;
@@ -776,7 +657,7 @@ h1, h2, h3, h4, h5, h6, button {
    ────────────────────────────────────────────────────────────── */
 .pb-legal { max-width: 720px; }
 .pb-legal-updated {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -790,14 +671,14 @@ h1, h2, h3, h4, h5, h6, button {
   margin-bottom: 2rem;
 }
 .pb-legal-body {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 1.0625rem;
   line-height: 1.65;
   color: var(--pb-text);
 }
 .pb-legal-body section { margin-bottom: 2.5rem; }
 .pb-legal-body h2 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 1.35rem;
   letter-spacing: -0.005em;
@@ -835,12 +716,12 @@ h1, h2, h3, h4, h5, h6, button {
    kept for hierarchy contrast. */
 .pb-prose-serif p,
 .pb-prose-serif li {
-  font-family: var(--font-garamond), "EB Garamond", Georgia, serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 1.2rem;
   line-height: 1.7;
 }
 .pb-prose-serif blockquote {
-  font-family: var(--font-garamond), "EB Garamond", Georgia, serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-style: italic;
   font-size: 1.3rem;
   line-height: 1.6;
@@ -858,7 +739,7 @@ h1, h2, h3, h4, h5, h6, button {
 .pb-admin-pill {
   display: inline-flex;
   align-items: center;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.7rem;
   letter-spacing: 0.28em;
@@ -881,14 +762,14 @@ h1, h2, h3, h4, h5, h6, button {
   gap: 1rem;
 }
 .pb-admin-card-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: -0.005em;
   color: var(--pb-text);
 }
 .pb-admin-card-body {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.55;
   color: var(--pb-text-soft);
@@ -902,11 +783,11 @@ h1, h2, h3, h4, h5, h6, button {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
 }
 .pb-admin-table thead th {
   text-align: left;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
   letter-spacing: 0.22em;
@@ -979,13 +860,13 @@ h1, h2, h3, h4, h5, h6, button {
   color: var(--pb-text);
 }
 .pb-page-index-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 1.3rem;
 }
 .pb-page-index a:hover .pb-page-index-title { color: var(--pb-accent-strong); }
 .pb-page-index-date {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -994,7 +875,7 @@ h1, h2, h3, h4, h5, h6, button {
 .pb-page-index-excerpt {
   margin-top: 0.5rem;
   color: var(--pb-text-soft);
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.55;
   max-width: 38rem;
@@ -1066,7 +947,7 @@ h1, h2, h3, h4, h5, h6, button {
 
 /* Section label in left sidebar */
 .pb-left-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.68rem;
   letter-spacing: 0.18em;
@@ -1114,7 +995,7 @@ h1, h2, h3, h4, h5, h6, button {
   margin-bottom: 0.85rem;
 }
 .pb-side-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
   letter-spacing: 0.18em;
@@ -1122,13 +1003,13 @@ h1, h2, h3, h4, h5, h6, button {
   color: var(--pb-text);
 }
 .pb-side-count {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   font-size: 0.8rem;
   color: var(--pb-text-soft);
 }
 .pb-side-empty {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.9rem;
   color: var(--pb-text-soft);
   padding: 0.5rem 0 0.25rem;
@@ -1137,7 +1018,7 @@ h1, h2, h3, h4, h5, h6, button {
   margin-left: auto;
   background: transparent;
   border: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1166,10 +1047,10 @@ h1, h2, h3, h4, h5, h6, button {
   margin-bottom: 0;
   background: color-mix(in srgb, var(--pb-accent) 10%, var(--pb-bg));
   border: 1px solid color-mix(in srgb, var(--pb-accent) 22%, transparent);
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
 }
 .pb-now-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.6rem;
   letter-spacing: 0.18em;
@@ -1218,7 +1099,7 @@ h1, h2, h3, h4, h5, h6, button {
 
 /* "UP NEXT" section divider */
 .pb-up-next-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.62rem;
   letter-spacing: 0.18em;
@@ -1258,7 +1139,7 @@ h1, h2, h3, h4, h5, h6, button {
   gap: 0.65rem;
   padding: 0.5rem 0.25rem;
   border-bottom: 1px solid var(--pb-hairline);
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   min-height: 3rem;
 }
 .pb-queue-item:last-child { border-bottom: 0; }
@@ -1281,7 +1162,7 @@ h1, h2, h3, h4, h5, h6, button {
   border-radius: 0.125rem;
 }
 .pb-yt-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.65rem;
   letter-spacing: 0.06em;
@@ -1305,7 +1186,7 @@ h1, h2, h3, h4, h5, h6, button {
   min-width: 0;
 }
 .pb-track-badge {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1352,7 +1233,7 @@ h1, h2, h3, h4, h5, h6, button {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.92rem;
   color: var(--pb-text);
 }
@@ -1427,7 +1308,7 @@ h1, h2, h3, h4, h5, h6, button {
   border-color: var(--pb-accent);
 }
 .pb-host-bar-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.7rem;
   letter-spacing: 0.18em;
@@ -1452,7 +1333,7 @@ h1, h2, h3, h4, h5, h6, button {
   border: 0;
   border-bottom: 2px solid transparent;
   padding: 1rem 0.5rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
   letter-spacing: 0.14em;
@@ -1483,7 +1364,7 @@ h1, h2, h3, h4, h5, h6, button {
 .pb-textarea {
   resize: vertical;
   min-height: 5rem;
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.92rem;
   line-height: 1.45;
   padding: 0.7rem 0.85rem;
@@ -1504,7 +1385,7 @@ h1, h2, h3, h4, h5, h6, button {
   border: 1px solid var(--pb-hairline);
   border-radius: 999px;
   background: var(--pb-bg);
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
 }
 .pb-volume-icon {
   font-size: 0.95rem;
@@ -1552,7 +1433,7 @@ h1, h2, h3, h4, h5, h6, button {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
 }
 .pb-chat-meta {
   display: flex;
@@ -1687,7 +1568,7 @@ h1, h2, h3, h4, h5, h6, button {
 
 /* Track title below the card */
 .pb-np-title-below {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: clamp(0.9rem, 2.5vw, 1.15rem);
   color: var(--pb-text);
@@ -1700,7 +1581,7 @@ h1, h2, h3, h4, h5, h6, button {
 
 .pb-np-loading {
   color: rgba(255, 255, 255, 0.5);
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.85rem;
   font-style: italic;
   position: absolute;
@@ -1724,7 +1605,7 @@ h1, h2, h3, h4, h5, h6, button {
   color: var(--pb-on-ink);
   border: 2px solid var(--pb-ink);
   cursor: pointer;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
@@ -1748,7 +1629,7 @@ h1, h2, h3, h4, h5, h6, button {
   color: var(--pb-text);
   border: 2px solid var(--pb-hairline);
   cursor: pointer;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.9rem;
   display: inline-flex;
@@ -1807,13 +1688,13 @@ h1, h2, h3, h4, h5, h6, button {
   padding: 0.2rem 0.75rem;
   border: 1px solid var(--pb-hairline);
   border-radius: 999px;
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.82rem;
   color: var(--pb-text);
 }
 .pb-chip-tag {
   font-size: 0.65rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1869,12 +1750,12 @@ h1, h2, h3, h4, h5, h6, button {
   margin-top: 0.5rem;
 }
 .pb-guest-toggle-label {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.82rem;
   color: var(--pb-text-soft);
 }
 .pb-guest-toggle-btn {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.68rem;
   letter-spacing: 0.12em;
@@ -1925,7 +1806,7 @@ h1, h2, h3, h4, h5, h6, button {
   min-width: 0;
 }
 .pb-mini-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 600;
   font-size: 0.9rem;
   white-space: nowrap;
@@ -1935,7 +1816,7 @@ h1, h2, h3, h4, h5, h6, button {
   line-height: 1.25;
 }
 .pb-mini-sub {
-  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-size: 0.72rem;
   color: var(--pb-text-soft);
   margin-top: 0.1rem;
@@ -1992,7 +1873,7 @@ h1, h2, h3, h4, h5, h6, button {
   border: 0;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter), -apple-system, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
@@ -2079,86 +1960,41 @@ h1, h2, h3, h4, h5, h6, button {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Landing (projectblue.cc). Liquid glass on the icons and the
-   floating nav capsule (@samasante/liquid-glass); cards are CSS
-   frosted glass. Dark-first (boot script in layout.tsx). Fluid from
-   a 320px phone to a wide monitor: sizes are clamps, grids auto-fit.
+   Liquid glass UI, shared by every page: the dot-grid canvas, the
+   floating nav capsule, pills, glass icons, frosted cards, and the
+   landing (projectblue.cc). Fluid from a 320px phone to a wide
+   monitor: sizes are clamps, grids auto-fit.
    ────────────────────────────────────────────────────────────── */
-.pb-lg {
-  --lg-bg:        #050506;
-  --lg-dot:       rgba(255, 255, 255, 0.08);
-  --lg-text:      #F4F4F6;
-  --lg-soft:      rgba(244, 244, 246, 0.64);
-  --lg-faint:     rgba(244, 244, 246, 0.4);
-  --lg-hair:      rgba(255, 255, 255, 0.09);
-  --lg-card:      rgba(22, 22, 26, 0.62);
-  --lg-capsule:   rgba(24, 24, 28, 0.55);
-  --lg-edge:      rgba(255, 255, 255, 0.11);
-  --lg-highlight: rgba(255, 255, 255, 0.08);
-  --lg-field:     rgba(255, 255, 255, 0.05);
-  --lg-accent:    #5E86F0;
-  --lg-solid:     #F4F4F6;
-  --lg-on-solid:  #0A0A0B;
-  --lg-shadow:    0 24px 60px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
-  --lg-gutter:    clamp(1rem, 4vw, 2rem);
-
+.pb-lg,
+.pb-welcome {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  color: var(--lg-text);
-  background-color: var(--lg-bg);
-  background-image: radial-gradient(circle at center, var(--lg-dot) 1px, transparent 1.3px);
+  color: var(--pb-text);
+  background-color: var(--pb-bg);
+  background-image: radial-gradient(circle at center, var(--pb-dot) 1px, transparent 1.3px);
   background-size: 22px 22px;
-  font-family: var(--font-inter), -apple-system, "SF Pro Text", system-ui, sans-serif;
   overflow-x: clip;
 }
-:root[data-theme="light"] .pb-lg {
-  --lg-bg:        #F4F4F5;
-  --lg-dot:       rgba(0, 0, 0, 0.1);
-  --lg-text:      #0A0A0B;
-  --lg-soft:      rgba(10, 10, 11, 0.62);
-  --lg-faint:     rgba(10, 10, 11, 0.44);
-  --lg-hair:      rgba(0, 0, 0, 0.08);
-  --lg-card:      rgba(255, 255, 255, 0.66);
-  --lg-capsule:   rgba(255, 255, 255, 0.6);
-  --lg-edge:      rgba(0, 0, 0, 0.08);
-  --lg-highlight: rgba(255, 255, 255, 0.9);
-  --lg-field:     rgba(0, 0, 0, 0.04);
-  --lg-accent:    #3E63C9;
-  --lg-solid:     #0A0A0B;
-  --lg-on-solid:  #F4F4F6;
-  --lg-shadow:    0 24px 60px rgba(15, 20, 40, 0.12), 0 2px 8px rgba(15, 20, 40, 0.06);
-}
-html:has(.pb-lg),
-html:has(.pb-lg) body { background: #050506; }
-html[data-theme="light"]:has(.pb-lg),
-html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
-@media (prefers-reduced-motion: no-preference) {
-  html:has(.pb-lg) { scroll-behavior: smooth; }
-}
-/* Big screens: scale the whole page up rather than leave it marooned */
-@media (min-width: 1920px) { html:has(.pb-lg) { font-size: 112.5%; } }
-@media (min-width: 2560px) { html:has(.pb-lg) { font-size: 131.25%; } }
-
-.pb-lg ::selection { background: rgba(94, 134, 240, 0.4); color: inherit; }
-.pb-lg h1, .pb-lg h2, .pb-lg h3, .pb-lg button { font-family: inherit; }
 .pb-lg main { flex: 1; }
 .pb-lg section[id] { scroll-margin-top: 5.5rem; }
-.pb-lg a:focus-visible,
-.pb-lg button:focus-visible,
-.pb-lg input:focus-visible {
-  outline: 2px solid var(--lg-accent);
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--pb-accent);
   outline-offset: 2px;
 }
-.pb-lg-faint { color: var(--lg-faint); }
-.pb-lg-dot { color: var(--lg-accent); }
+.pb-lg-faint { color: var(--pb-text-faint); }
+.pb-lg-dot { color: var(--pb-accent); }
 
 /* Floating glass nav capsule */
 .pb-lg-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  padding: 0.75rem var(--lg-gutter) 0;
+  padding: 0.75rem var(--pb-gutter) 0;
   pointer-events: none;
 }
 .pb-lg-capsule {
@@ -2169,14 +2005,14 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   gap: 0.6rem;
   padding: 0 0.45rem 0 1.15rem;
   border-radius: 999px;
-  background: var(--lg-capsule);
+  background: var(--pb-capsule);
   box-shadow:
-    inset 0 1px 0 var(--lg-highlight),
-    inset 0 0 0 1px var(--lg-edge),
+    inset 0 1px 0 var(--pb-highlight),
+    inset 0 0 0 1px var(--pb-edge),
     0 10px 30px rgba(0, 0, 0, 0.3);
   pointer-events: auto;
 }
-.pb-lg-capsule .pb-wordmark { color: var(--lg-text); flex: none; }
+.pb-lg-capsule .pb-wordmark { color: var(--pb-text); flex: none; }
 .pb-lg-capsule .pb-wordmark-line { font-size: 0.9rem; }
 .pb-lg-capsule .pb-wordmark-img { height: 1.4rem; }
 .pb-lg-beta {
@@ -2186,8 +2022,8 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--lg-soft);
-  border: 1px solid var(--lg-edge);
+  color: var(--pb-text-soft);
+  border: 1px solid var(--pb-edge);
   border-radius: 999px;
   padding: 0.3rem 0.5rem;
 }
@@ -2199,12 +2035,12 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
 .pb-lg-links a {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--lg-soft);
+  color: var(--pb-text-soft);
   text-decoration: none;
   white-space: nowrap;
   transition: color 200ms cubic-bezier(.2,.7,.3,1);
 }
-.pb-lg-links a:hover { color: var(--lg-text); }
+.pb-lg-links a:hover { color: var(--pb-text); }
 .pb-lg-spacer { flex: 1; }
 .pb-lg-short { display: none; }
 
@@ -2219,28 +2055,28 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--lg-text);
+  color: var(--pb-text);
   text-decoration: none;
   white-space: nowrap;
-  background: var(--lg-field);
-  border: 1px solid var(--lg-edge);
-  box-shadow: inset 0 1px 0 var(--lg-highlight);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
+  box-shadow: inset 0 1px 0 var(--pb-highlight);
   transition: background 200ms cubic-bezier(.2,.7,.3,1),
               border-color 200ms cubic-bezier(.2,.7,.3,1),
               transform 120ms ease;
 }
 .pb-lg-pill:hover {
-  background: color-mix(in srgb, var(--lg-text) 10%, transparent);
-  border-color: color-mix(in srgb, var(--lg-text) 22%, transparent);
+  background: color-mix(in srgb, var(--pb-text) 10%, transparent);
+  border-color: color-mix(in srgb, var(--pb-text) 22%, transparent);
 }
 .pb-lg-pill:active { transform: scale(0.97); }
 .pb-lg-pill--solid {
-  background: var(--lg-solid);
-  color: var(--lg-on-solid);
-  border-color: var(--lg-solid);
+  background: var(--pb-ink);
+  color: var(--pb-on-ink);
+  border-color: var(--pb-ink);
 }
 .pb-lg-pill--solid:hover {
-  background: color-mix(in srgb, var(--lg-solid) 86%, var(--lg-bg));
+  background: color-mix(in srgb, var(--pb-ink) 86%, var(--pb-bg));
   border-color: transparent;
 }
 .pb-lg-pill--lg {
@@ -2255,13 +2091,13 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   border-radius: 50%;
   display: grid;
   place-items: center;
-  color: var(--lg-soft);
-  background: var(--lg-field);
-  border: 1px solid var(--lg-edge);
+  color: var(--pb-text-soft);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
   cursor: pointer;
   transition: color 200ms cubic-bezier(.2,.7,.3,1);
 }
-.pb-lg-iconbtn:hover { color: var(--lg-text); }
+.pb-lg-iconbtn:hover { color: var(--pb-text); }
 
 /* Liquid glass icons. The tone is a gradient shared by the tile (first
    paint) and the fill the glass refracts. */
@@ -2349,7 +2185,7 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: clamp(3rem, 8vh, 6rem) var(--lg-gutter) clamp(3.5rem, 9vh, 6.5rem);
+  padding: clamp(3rem, 8vh, 6rem) var(--pb-gutter) clamp(3.5rem, 9vh, 6.5rem);
 }
 .pb-lg-hero-icons {
   display: flex;
@@ -2381,14 +2217,14 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   font-weight: 700;
   line-height: 0.98;
   letter-spacing: -0.055em;
-  color: var(--lg-text);
+  color: var(--pb-text);
   margin-bottom: clamp(1rem, 2.5vw, 1.4rem);
 }
 .pb-lg-sub {
   font-size: clamp(1rem, 0.9rem + 0.6vw, 1.3rem);
   line-height: 1.5;
   letter-spacing: -0.01em;
-  color: var(--lg-soft);
+  color: var(--pb-text-soft);
   max-width: 31rem;
   text-wrap: balance;
 }
@@ -2399,10 +2235,10 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   border-radius: 14px;
   font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
   font-size: clamp(0.8rem, 0.7rem + 0.9vw, 1.1rem);
-  color: var(--lg-text);
-  background: var(--lg-field);
-  border: 1px solid var(--lg-edge);
-  box-shadow: inset 0 1px 0 var(--lg-highlight);
+  color: var(--pb-text);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
+  box-shadow: inset 0 1px 0 var(--pb-highlight);
   overflow-wrap: anywhere;
 }
 .pb-lg-chip strong {
@@ -2422,7 +2258,7 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   width: 100%;
   max-width: 70rem;
   margin: 0 auto;
-  padding: clamp(4.5rem, 10vw, 8rem) var(--lg-gutter) 0;
+  padding: clamp(4.5rem, 10vw, 8rem) var(--pb-gutter) 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2434,7 +2270,7 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--lg-faint);
+  color: var(--pb-text-faint);
   margin-bottom: 1rem;
 }
 .pb-lg-h2 {
@@ -2465,9 +2301,9 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   text-align: left;
   padding: clamp(1.1rem, 2.5vw, 1.5rem);
   border-radius: 20px;
-  background: var(--lg-card);
-  border: 1px solid var(--lg-edge);
-  box-shadow: inset 0 1px 0 var(--lg-highlight), var(--lg-shadow);
+  background: var(--pb-card);
+  border: 1px solid var(--pb-edge);
+  box-shadow: inset 0 1px 0 var(--pb-highlight), var(--pb-shadow);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
 }
@@ -2483,7 +2319,7 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   right: clamp(1.1rem, 2.5vw, 1.5rem);
   font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
   font-size: 0.75rem;
-  color: var(--lg-faint);
+  color: var(--pb-text-faint);
 }
 .pb-lg-card-title {
   font-size: 1.1rem;
@@ -2494,18 +2330,18 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
 .pb-lg-card-body {
   font-size: 0.95rem;
   line-height: 1.55;
-  color: var(--lg-soft);
+  color: var(--pb-text-soft);
 }
 .pb-lg-code {
   font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
   font-size: 0.9em;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--lg-text);
+  color: var(--pb-text);
   padding: 0.1rem 0.4rem;
   border-radius: 6px;
-  background: var(--lg-field);
-  border: 1px solid var(--lg-edge);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
   white-space: nowrap;
 }
 .pb-lg-card--form {
@@ -2521,87 +2357,561 @@ html[data-theme="light"]:has(.pb-lg) body { background: #F4F4F5; }
   font-weight: 600;
 }
 
-/* The shared invite form, restyled for the landing */
-.pb-lg .pb-beta-form {
+/* ──────────────────────────────────────────────────────────────
+   Shared primitives, restyled for liquid glass on every page:
+   labels, fields, buttons, inline links, prompts and the footer.
+   ────────────────────────────────────────────────────────────── */
+.pb-beta-form {
   margin: 0;
   padding: 0;
   border: 0;
   max-width: none;
 }
-.pb-lg .pb-action-label {
+.pb-action-label {
+  align-self: flex-start;
   font-family: inherit;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: var(--lg-soft);
+  text-transform: uppercase;
+  color: var(--pb-text-soft);
   border: 0;
   padding: 0;
   margin: 0 0 0.5rem;
 }
-.pb-lg .pb-input {
+.pb-input {
+  width: 100%;
+  max-width: none;
   font-family: inherit;
   font-size: 1rem; /* 16px keeps iOS from zooming on focus */
-  color: var(--lg-text);
-  background: var(--lg-field);
-  border: 1px solid var(--lg-edge);
+  color: var(--pb-text);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
   border-radius: 12px;
   padding: 0.75rem 0.9rem;
   margin: 0;
+  transition: border-color 200ms cubic-bezier(.2,.7,.3,1);
 }
-.pb-lg .pb-input:focus { border-color: var(--lg-accent); outline: none; }
-.pb-lg .pb-input::placeholder { color: var(--lg-faint); }
-.pb-lg .pb-action-row { margin-top: 1.25rem; }
-.pb-lg .pb-action-btn {
-  flex: 1;
+.pb-input:focus { border-color: var(--pb-accent); outline: none; }
+.pb-input::placeholder { color: var(--pb-text-faint); }
+textarea.pb-input { min-height: 8rem; line-height: 1.55; resize: vertical; }
+
+/* The room-code and invite-code fields: big mono, same rounded field */
+.pb-code-input,
+.pb-beta-code-input {
+  width: 100%;
+  max-width: none;
+  font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 6vw, 2.25rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pb-text);
+  caret-color: var(--pb-accent);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
+  border-radius: 14px;
+  padding: 0.7rem 1rem;
+  outline: none;
+  transition: border-color 200ms cubic-bezier(.2,.7,.3,1);
+}
+.pb-beta-code-input { font-size: clamp(1.2rem, 4.5vw, 1.6rem); letter-spacing: 0.12em; }
+.pb-code-input:focus,
+.pb-beta-code-input:focus { border-color: var(--pb-accent); }
+.pb-code-input::placeholder,
+.pb-beta-code-input::placeholder { color: var(--pb-text-faint); }
+
+.pb-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.pb-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 3rem;
-  padding: 0 1.2rem;
+  padding: 0 1.4rem;
   border: 0;
   border-radius: 999px;
+  font-family: inherit;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--lg-on-solid);
-  background: var(--lg-solid);
+  color: var(--pb-on-ink);
+  background: var(--pb-ink);
+  box-shadow: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 200ms cubic-bezier(.2,.7,.3,1), transform 120ms ease;
 }
-.pb-lg .pb-action-btn:hover {
-  color: var(--lg-on-solid);
-  background: color-mix(in srgb, var(--lg-solid) 86%, var(--lg-bg));
+.pb-action-btn:hover {
+  color: var(--pb-on-ink);
+  border-color: transparent;
+  background: color-mix(in srgb, var(--pb-ink) 86%, var(--pb-bg));
 }
-.pb-lg .pb-beta-prompt {
+.pb-action-btn:active { transform: scale(0.98); }
+.pb-action-btn:disabled {
+  color: var(--pb-on-ink);
+  background: color-mix(in srgb, var(--pb-ink) 35%, var(--pb-bg));
+  cursor: not-allowed;
+  transform: none;
+}
+.pb-action-btn-secondary,
+.pb-action-btn-secondary:hover {
+  color: var(--pb-text);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
+}
+/* A lone button in a card fills the row */
+.pb-lg-card .pb-action-row > .pb-action-btn:only-child { flex: 1; }
+.pb-shell-card .pb-action-btn { flex: 1; }
+
+/* Inline text actions and links */
+.pb-shuffle {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--pb-accent);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+.pb-shuffle:hover { color: var(--pb-accent-strong); }
+
+.pb-beta-prompt {
   margin: 0;
   font-size: 0.95rem;
-  color: var(--lg-text);
+  color: var(--pb-text-soft);
+}
+.pb-lg-card .pb-beta-prompt { color: var(--pb-text); }
+
+/* The old serif/italic emphasis now just carries the headline */
+.pb-emph {
+  font-family: inherit;
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  padding: 0;
 }
 
 /* Footer */
-.pb-lg .pb-welcome-footer {
+.pb-welcome-footer {
+  width: 100%;
   max-width: none;
-  margin-top: clamp(4.5rem, 10vw, 7rem);
-  padding: 1.25rem var(--lg-gutter) 1.5rem;
+  margin: clamp(4.5rem, 10vw, 7rem) 0 0;
+  padding: 1.25rem var(--pb-gutter) 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.75rem 1.5rem;
-  border-top: 1px solid var(--lg-hair);
+  border-top: 1px solid var(--pb-hairline);
   font-family: inherit;
   font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0;
-  color: var(--lg-faint);
+  color: var(--pb-text-faint);
 }
-.pb-lg .pb-footer-note { color: var(--lg-faint); }
-.pb-lg .pb-footer-link,
-.pb-lg .pb-social {
-  color: var(--lg-soft);
+.pb-footer-note { color: var(--pb-text-faint); }
+.pb-footer-link,
+.pb-social {
+  color: var(--pb-text-soft);
   text-decoration: none;
+  font-family: inherit;
+  font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0;
 }
-.pb-lg .pb-social-label { text-decoration: none; }
-.pb-lg .pb-footer-link:hover,
-.pb-lg .pb-social:hover { color: var(--lg-text); }
+.pb-social-label { text-decoration: none; }
+.pb-footer-link:hover,
+.pb-social:hover { color: var(--pb-text); }
+
+/* ──────────────────────────────────────────────────────────────
+   Page shell — every public page that isn't the landing: a glass
+   icon, a kicker, the title, then the content in a frosted card.
+   ────────────────────────────────────────────────────────────── */
+.pb-shell main { flex: 1; }
+.pb-shell-main {
+  width: 100%;
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: clamp(2.75rem, 7vw, 4.5rem) var(--pb-gutter) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pb-shell-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+}
+.pb-shell-head > .pb-gi { margin-bottom: 1.5rem; }
+.pb-shell-head .pb-lg-eyebrow { margin-bottom: 0.85rem; }
+.pb-shell-title {
+  font-size: clamp(2.25rem, 1.4rem + 4.2vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--pb-text);
+  text-wrap: balance;
+}
+.pb-shell-sub {
+  margin-top: 1rem;
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--pb-text-soft);
+  max-width: 30rem;
+}
+.pb-shell-card { width: 100%; }
+.pb-shell-card--narrow { max-width: 28rem; }
+.pb-shell-card--wide { max-width: 46rem; padding: clamp(1.25rem, 4vw, 2.5rem); }
+.pb-shell-card .pb-form-stack,
+.pb-shell-card .pb-action-form { display: flex; flex-direction: column; }
+.pb-shell-after {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.pb-shell-after .pb-beta-form { text-align: left; margin-top: 1rem; }
+.pb-lg-card-head + .pb-beta-form { margin-top: 0; }
+
+/* Prose inside cards (legal, docs, blog, auth notes) */
+.pb-legal-body {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--pb-text);
+  text-align: left;
+}
+.pb-legal-body > :first-child,
+.pb-legal-body :is(h2, h3):first-child { margin-top: 0; }
+.pb-legal-body h2 {
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 2rem 0 0.6rem;
+}
+.pb-legal-body h3 { font-size: 1.05rem; font-weight: 650; margin: 1.5rem 0 0.5rem; }
+.pb-legal-body p,
+.pb-legal-body ul,
+.pb-legal-body ol { color: var(--pb-text-soft); max-width: none; }
+.pb-legal-body li { max-width: none; }
+.pb-legal-body a {
+  color: var(--pb-accent);
+  font-weight: 600;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.pb-legal-body code {
+  font-size: 0.9em;
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+}
+.pb-prose-serif p,
+.pb-prose-serif li {
+  font-family: inherit;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+.pb-prose-serif blockquote {
+  font-family: inherit;
+  font-style: normal;
+  font-size: 1.1rem;
+  border-left: 3px solid var(--pb-accent);
+}
+
+/* Blog and docs index */
+.pb-page-index { list-style: none; margin: 0; padding: 0; }
+.pb-page-index > li {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--pb-hairline);
+}
+.pb-page-index > li:first-child { padding-top: 0; }
+.pb-page-index > li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+/* ──────────────────────────────────────────────────────────────
+   Pages that draw their own header (admin, the room): the old
+   header becomes the same floating capsule, CSS only.
+   ────────────────────────────────────────────────────────────── */
+.pb-lg-capsule { display: flex; }
+.pb-welcome-header {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  width: calc(100% - 2 * var(--pb-gutter));
+  max-width: 72rem;
+  height: 3.5rem;
+  margin: 0.75rem auto 0;
+  padding: 0 0.45rem 0 1.15rem;
+  border-radius: 999px;
+  background: var(--pb-capsule);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 var(--pb-highlight),
+    inset 0 0 0 1px var(--pb-edge),
+    0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.pb-welcome-header .pb-wordmark { color: var(--pb-text); flex: none; }
+.pb-welcome-header .pb-wordmark-line,
+.pb-lg-capsule .pb-wordmark-line { font-size: 0.9rem; }
+.pb-welcome-header .pb-wordmark-img,
+.pb-lg-capsule .pb-wordmark-img { height: 1.4rem; }
+.pb-welcome-nav {
+  margin-left: auto;
+  padding-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.pb-nav-link {
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--pb-text-soft);
+  text-decoration: none;
+}
+.pb-nav-link:hover { color: var(--pb-text); }
+.pb-nav-link-primary {
+  height: 2.375rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 0;
+  color: var(--pb-on-ink);
+  background: var(--pb-ink);
+  font-weight: 600;
+}
+.pb-nav-link-primary:hover { color: var(--pb-on-ink); background: color-mix(in srgb, var(--pb-ink) 86%, var(--pb-bg)); }
+.pb-admin-pill {
+  font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: var(--pb-text-soft);
+  background: transparent;
+  border: 1px solid var(--pb-edge);
+  border-radius: 999px;
+  padding: 0.3rem 0.5rem;
+}
+
+/* Admin and other pages that still use the older page classes */
+.pb-welcome-main:not(.pb-room-main) {
+  padding: clamp(2.5rem, 6vw, 4rem) var(--pb-gutter);
+}
+.pb-welcome-headline {
+  font-family: inherit;
+  font-size: clamp(2.25rem, 1.4rem + 4.2vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.pb-legal-title { font-size: clamp(2rem, 1.3rem + 3.6vw, 3.5rem); }
+.pb-legal-updated {
+  font-family: "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--pb-text-faint);
+}
+.pb-welcome-rule { border-top-color: var(--pb-hairline); }
+.pb-welcome-headline .pb-emph {
+  font-family: inherit;
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  padding: 0;
+}
+.pb-action-label { display: block; }
+.pb-admin-grid { gap: clamp(0.75rem, 2vw, 1rem); }
+.pb-admin-card {
+  border: 1px solid var(--pb-edge);
+  border-radius: 20px;
+  background: var(--pb-card);
+  box-shadow: inset 0 1px 0 var(--pb-highlight), var(--pb-shadow);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+.pb-admin-card-title {
+  font-size: 1.2rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.pb-admin-table thead th {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--pb-text-soft);
+  border-bottom: 1px solid var(--pb-hairline);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Room — liquid glass pass. Layout and behaviour unchanged (three
+   columns ≥ 768px, tabs below); panels become frosted cards, the
+   transport a floating bar, and hovers stay neutral so the accent
+   keeps to the live dot and the active tab.
+   ────────────────────────────────────────────────────────────── */
+.pb-room .pb-welcome-header { position: relative; top: 0; flex-shrink: 0; }
+.pb-room-meta { padding-top: 0; }
+.pb-room-code {
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  color: var(--pb-text);
+  background: var(--pb-field);
+  border: 1px solid var(--pb-edge);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+}
+.pb-room-code:hover { color: var(--pb-text); border-color: var(--pb-text-faint); }
+.pb-room-status { font-weight: 500; font-size: 0.82rem; }
+
+.pb-room-body {
+  gap: 0.75rem;
+  padding: 0.75rem var(--pb-gutter) 0;
+  border-top: 0;
+}
+.pb-room-left,
+.pb-room-right {
+  border: 1px solid var(--pb-edge);
+  border-radius: 20px;
+  background: var(--pb-card);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: inset 0 1px 0 var(--pb-highlight);
+  overflow: hidden;
+}
+.pb-room-left { overflow-y: auto; }
+.pb-room-center { padding: 0.25rem 0.5rem; }
+.pb-room-transport {
+  margin: 0.75rem var(--pb-gutter);
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--pb-edge);
+  border-radius: 20px;
+  background: var(--pb-card);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: inset 0 1px 0 var(--pb-highlight), var(--pb-shadow);
+}
+.pb-side-panel {
+  border: 1px solid var(--pb-edge);
+  border-radius: 20px;
+  background: var(--pb-card);
+}
+.pb-room-right .pb-side-panel { border: 0; border-radius: 0; background: transparent; }
+.pb-left-label,
+.pb-side-title,
+.pb-up-next-label {
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+/* Stage: a frosted tile, not a solid slab */
+.pb-now-playing-stage {
+  background: var(--pb-card);
+  border: 1px solid var(--pb-edge);
+  border-radius: 24px;
+  box-shadow: inset 0 1px 0 var(--pb-highlight), var(--pb-shadow);
+}
+.pb-np-loading { color: var(--pb-text-soft); }
+.pb-yt-frame,
+.pb-audio-frame {
+  border: 1px solid var(--pb-edge);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.pb-audio-frame { background: var(--pb-card); }
+.pb-room-empty {
+  border: 1px dashed var(--pb-edge);
+  border-radius: 20px;
+  background: var(--pb-field);
+}
+.pb-room-empty-title { font-style: normal; font-weight: 650; letter-spacing: -0.02em; }
+
+/* People: neutral dot and host badge (the accent is kept for the live
+   dot and the active tab) */
+.pb-people-dot { background: var(--pb-text-faint); }
+.pb-people-badge {
+  color: var(--pb-text-soft);
+  border-color: var(--pb-edge);
+  border-radius: 999px;
+}
+
+/* Queue rows and thumbnails */
+.pb-queue-item { border-radius: 12px; }
+.pb-track-thumb { border-radius: 10px; }
+
+/* Controls: neutral hovers (accent stays on the live dot + active tab) */
+.pb-play-pill { border: 0; font-weight: 600; letter-spacing: 0; }
+.pb-play-pill:hover {
+  background: color-mix(in srgb, var(--pb-ink) 86%, var(--pb-bg));
+  border-color: transparent;
+}
+.pb-skip-pill {
+  border: 1px solid var(--pb-edge);
+  background: var(--pb-field);
+  font-weight: 600;
+}
+.pb-skip-pill:hover {
+  color: var(--pb-text);
+  border-color: var(--pb-text-faint);
+}
+.pb-host-btn:hover {
+  background: color-mix(in srgb, var(--pb-ink) 86%, var(--pb-bg));
+  border-color: transparent;
+}
+.pb-host-btn-toggle:hover { border-color: var(--pb-text-faint); }
+.pb-audio-btn:hover {
+  background: color-mix(in srgb, var(--pb-ink) 86%, var(--pb-bg));
+  border-color: transparent;
+}
+
+/* Mobile: frosted tab bar and a rounded mini-player */
+@media (max-width: 767px) {
+  .pb-room-tabbar {
+    background: var(--pb-capsule);
+    border-top: 1px solid var(--pb-edge);
+  }
+  .pb-room-tab { font-weight: 600; }
+  .pb-mini-player {
+    left: 0.5rem;
+    right: 0.5rem;
+    border: 1px solid var(--pb-edge);
+    border-radius: 18px;
+    background: var(--pb-card);
+    box-shadow: var(--pb-shadow);
+    padding-bottom: 0.65rem;
+    margin-bottom: 0.5rem;
+  }
+}
 
 /* Adapting */
 @media (max-width: 900px) {
   .pb-lg-links { display: none; }
 }
 @media (max-width: 640px) {
+  .pb-welcome-header { height: 3.25rem; gap: 0.4rem; padding-left: 0.95rem; }
+  .pb-welcome-nav { gap: 0.6rem; }
+  .pb-back-label,
+  .pb-admin-pill,
+  .pb-room-status { display: none; }
   .pb-lg-capsule { height: 3.25rem; gap: 0.4rem; padding-left: 0.95rem; }
   .pb-lg-beta,
   .pb-lg-hide-sm { display: none; }

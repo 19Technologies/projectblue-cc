@@ -41,7 +41,7 @@ export default function SignInPage() {
   };
 
   return (
-    <PublicShell kicker="Welcome back" title={<>Sign <span className="pb-emph">in</span>.</>}>
+    <PublicShell icon="login" tone="tide" width="narrow" kicker="Welcome back" title={<>Sign <span className="pb-emph">in</span>.</>}>
       <form onSubmit={onSubmit} className="pb-form-stack">
         <label className="pb-action-label" htmlFor="signin-email">Email</label>
         <input

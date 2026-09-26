@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <PublicShell kicker="It happens" title={<>Reset your <span className="pb-emph">password</span>.</>}>
+    <PublicShell icon="key" tone="ember" width="narrow" kicker="It happens" title={<>Reset your <span className="pb-emph">password</span>.</>}>
       <p className="pb-legal-body" style={{ marginBottom: "2rem", color: "var(--pb-text-soft)" }}>
         Enter your email and we&apos;ll send you a link to choose a new password.
       </p>

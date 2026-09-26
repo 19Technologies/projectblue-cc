@@ -45,7 +45,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <PublicShell kicker="Make it yours" title={<>Create an <span className="pb-emph">account</span>.</>}>
+    <PublicShell icon="user-plus" tone="bloom" width="narrow" kicker="Make it yours" title={<>Create an <span className="pb-emph">account</span>.</>}>
       <p className="pb-legal-body" style={{ marginBottom: "2rem", color: "var(--pb-text-soft)" }}>
         Accounts are optional. You can open or join rooms without one — sign up only
         if you want to keep your rooms across devices.

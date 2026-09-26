@@ -3,7 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { WordMark } from "./BrandMark";
+import { Footer } from "./Footer";
+import { Header } from "./Header";
+import { GlassIcon } from "./LiquidGlass";
 
 /**
  * The beta gate — large animated welcome + single-use invite-code entry.
@@ -43,68 +45,63 @@ export const BetaGate = () => {
   };
 
   return (
-    <div className="pb-welcome pb-beta-page">
-      <div className="pb-topbar" aria-hidden />
+    <div className="pb-welcome pb-shell">
+      <Header minimal />
 
-      <header className="pb-welcome-header">
-        <WordMark />
-        <span className="pb-admin-pill" style={{ background: "var(--pb-accent)" }}>
-          BETA
-        </span>
-      </header>
+      <main id="main" className="pb-shell-main">
+        <div className="pb-shell-head">
+          <GlassIcon icon="key" tone="ember" size="lg" />
+          <p className="pb-lg-eyebrow">Private beta</p>
+          <h1 className="pb-shell-title">
+            Welcome, beta tester<span className="pb-lg-dot">.</span>
+          </h1>
+          <p className="pb-shell-sub">You&apos;re early. Drop your invite code below.</p>
+        </div>
 
-      <main id="main" className="pb-welcome-main">
-        <p className="pb-legal-updated pb-beta-eyebrow">Private beta</p>
-        <h1 className="pb-beta-headline">
-          Welcome, <span className="pb-emph pb-beta-emph">beta tester</span>.
-        </h1>
-        <p className="pb-beta-sub">
-          You&apos;re early. Drop your invite code below.
-        </p>
+        <div className="pb-lg-card pb-shell-card pb-shell-card--narrow">
+          <form onSubmit={onSubmit} className="pb-form-stack">
+            <label className="pb-action-label" htmlFor="beta-code">
+              Invite code
+            </label>
+            <input
+              id="beta-code"
+              type="text"
+              inputMode="text"
+              autoComplete="off"
+              spellCheck={false}
+              autoCapitalize="characters"
+              className="pb-beta-code-input"
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder="XXXX-YYY-ZZZ"
+            />
 
-        <hr className="pb-welcome-rule" />
+            <label
+              className="pb-action-label"
+              htmlFor="beta-who"
+              style={{ marginTop: "1.25rem" }}
+            >
+              Your name or email (for the record)
+            </label>
+            <input
+              id="beta-who"
+              type="text"
+              className="pb-input"
+              value={who}
+              onChange={(e) => setWho(e.target.value)}
+              placeholder="optional but appreciated"
+            />
 
-        <form onSubmit={onSubmit} className="pb-form-stack" style={{ maxWidth: "32rem" }}>
-          <label className="pb-action-label" htmlFor="beta-code">
-            Invite code
-          </label>
-          <input
-            id="beta-code"
-            type="text"
-            inputMode="text"
-            autoComplete="off"
-            spellCheck={false}
-            autoCapitalize="characters"
-            className="pb-beta-code-input"
-            value={code}
-            onChange={(e) => setCode(e.target.value.toUpperCase())}
-            placeholder="XXXX-YYY-ZZZ"
-          />
-
-          <label
-            className="pb-action-label"
-            htmlFor="beta-who"
-            style={{ marginTop: "1.75rem" }}
-          >
-            Your name or email (for the record)
-          </label>
-          <input
-            id="beta-who"
-            type="text"
-            className="pb-input"
-            value={who}
-            onChange={(e) => setWho(e.target.value)}
-            placeholder="optional but appreciated"
-            style={{ maxWidth: "32rem" }}
-          />
-
-          <div className="pb-action-row">
-            <button type="submit" disabled={busy} className="pb-action-btn">
-              {busy ? "Verifying…" : "Enter Project Blue"}
-            </button>
-          </div>
-        </form>
+            <div className="pb-action-row">
+              <button type="submit" disabled={busy} className="pb-action-btn">
+                {busy ? "Verifying…" : "Enter Project Blue"}
+              </button>
+            </div>
+          </form>
+        </div>
       </main>
+
+      <Footer />
     </div>
   );
 };

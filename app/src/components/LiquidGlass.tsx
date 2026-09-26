@@ -2,36 +2,52 @@
 
 import { Glass, type GlassOptics } from "@samasante/liquid-glass";
 import {
+  BookOpen,
   Crown,
   DoorOpen,
+  FileText,
   Hash,
   Headphones,
+  KeyRound,
   Link2,
   ListMusic,
+  Lock,
+  LogIn,
   Mail,
   MessageCircle,
   MonitorSmartphone,
   Music2,
+  Newspaper,
   Play,
   Send,
+  ShieldCheck,
+  UserPlus,
   Users,
 } from "lucide-react";
 
 // Icons are picked by name: server components can't pass components to a
 // client one.
 const ICONS = {
+  book: BookOpen,
   crown: Crown,
   devices: MonitorSmartphone,
   door: DoorOpen,
+  file: FileText,
   hash: Hash,
   headphones: Headphones,
+  key: KeyRound,
   link: Link2,
   list: ListMusic,
+  lock: Lock,
+  login: LogIn,
   mail: Mail,
   message: MessageCircle,
   music: Music2,
+  news: Newspaper,
   play: Play,
   send: Send,
+  shield: ShieldCheck,
+  "user-plus": UserPlus,
   users: Users,
 } as const;
 
@@ -73,7 +89,7 @@ const ICON_OPTICS: Partial<GlassOptics> = {
 interface GlassIconProps {
   icon: GlassIconName;
   tone: GlassTone;
-  size?: "xl" | "md" | "sm";
+  size?: "xl" | "lg" | "md" | "sm";
 }
 
 /** An Apple-style liquid glass app icon: a colour field refracted through a

@@ -1,4 +1,5 @@
 import { WordMark } from "@/components/BrandMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { LEGAL_SLUGS, getLegal } from "@/lib/legal";
 import Link from "next/link";
 
@@ -20,6 +21,7 @@ export default async function AdminLegalPage() {
           </Link>
           <Link href="/admin" className="pb-nav-link">Dashboard</Link>
           <span className="pb-admin-pill">ADMIN</span>
+          <ThemeToggle />
         </nav>
       </header>
 

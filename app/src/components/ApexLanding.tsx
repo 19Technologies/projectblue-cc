@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { BetaRequestForm } from "./BetaRequestForm";
-import { WordMark } from "./BrandMark";
 import { Footer } from "./Footer";
-import { GlassCapsule, GlassIcon, type GlassIconName, type GlassTone } from "./LiquidGlass";
-import { ThemeToggle } from "./ThemeToggle";
+import { Header } from "./Header";
+import { GlassIcon, type GlassIconName, type GlassTone } from "./LiquidGlass";
 
 const HERO_ICONS: [GlassIconName, GlassTone][] = [
   ["headphones", "sunset"],
@@ -67,26 +66,13 @@ const FEATURES: { icon: GlassIconName; tone: GlassTone; title: string; body: str
 export const ApexLanding = () => {
   return (
     <div className="pb-lg">
-      <header className="pb-lg-header">
-        <GlassCapsule className="pb-lg-capsule">
-          <WordMark asLink />
-          <span className="pb-lg-beta">Beta</span>
-          <nav className="pb-lg-links" aria-label="Sections">
-            <a href="#how">How it works</a>
-            <a href="#room">In a room</a>
-            <a href="#request">Invite</a>
-          </nav>
-          <span className="pb-lg-spacer" aria-hidden />
-          <Link href="/start" className="pb-lg-pill pb-lg-hide-sm">
-            Start a room
-          </Link>
-          <a href="#request" className="pb-lg-pill pb-lg-pill--solid">
-            <span className="pb-lg-long">Request an invite</span>
-            <span className="pb-lg-short">Get an invite</span>
-          </a>
-          <ThemeToggle variant="icon" />
-        </GlassCapsule>
-      </header>
+      <Header requestHref="#request">
+        <nav className="pb-lg-links" aria-label="Sections">
+          <a href="#how">How it works</a>
+          <a href="#room">In a room</a>
+          <a href="#request">Invite</a>
+        </nav>
+      </Header>
 
       <main id="main">
         <section className="pb-lg-hero" aria-labelledby="pb-lg-title">
@@ -173,10 +159,6 @@ export const ApexLanding = () => {
           <h2 id="pb-lg-request" className="pb-lg-h2 pb-lg-h2--big">
             Get a room<span className="pb-lg-dot">.</span>
           </h2>
-          <p className="pb-lg-sub">
-            We&apos;re letting people in a few at a time. Leave your email and
-            we&apos;ll send you an invite code when a spot opens.
-          </p>
           <div className="pb-lg-card pb-lg-card--form">
             <div className="pb-lg-card-head">
               <GlassIcon icon="mail" tone="ink" size="sm" />
@@ -187,7 +169,7 @@ export const ApexLanding = () => {
         </section>
       </main>
 
-      <Footer note="v0.1 beta · projectblue.cc" showThemeToggle={false} />
+      <Footer />
     </div>
   );
 };
