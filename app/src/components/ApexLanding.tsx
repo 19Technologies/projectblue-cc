@@ -2,13 +2,21 @@ import Link from "next/link";
 import { BetaRequestForm } from "./BetaRequestForm";
 import { WordMark } from "./BrandMark";
 import { Footer } from "./Footer";
-import { GlassBar, GlassWindow } from "./GlassWindow";
-import { LiquidHero } from "./LiquidHero";
-import { SyncPanels } from "./SyncPanels";
+import { GlassCapsule, GlassIcon, type GlassIconName, type GlassTone } from "./LiquidGlass";
 import { ThemeToggle } from "./ThemeToggle";
 
-const STEPS = [
+const HERO_ICONS: [GlassIconName, GlassTone][] = [
+  ["headphones", "sunset"],
+  ["users", "tide"],
+  ["play", "grove"],
+  ["message", "ember"],
+  ["link", "bloom"],
+];
+
+const STEPS: { icon: GlassIconName; tone: GlassTone; title: string; body: React.ReactNode }[] = [
   {
+    icon: "door",
+    tone: "tide",
     title: "Open a room",
     body: (
       <>
@@ -18,6 +26,8 @@ const STEPS = [
     ),
   },
   {
+    icon: "send",
+    tone: "bloom",
     title: "Share six characters",
     body: (
       <>
@@ -27,6 +37,8 @@ const STEPS = [
     ),
   },
   {
+    icon: "play",
+    tone: "grove",
     title: "Press play once",
     body: (
       <>
@@ -37,50 +49,82 @@ const STEPS = [
   },
 ];
 
-const ROOM_DETAILS: [string, string][] = [
-  ["Plays", "Audio files you upload, YouTube videos and whole playlists"],
-  ["Queue", "One shared queue, with shuffle and repeat"],
-  ["Talk", "A chat that sits next to the music"],
-  ["Control", "The host decides whether guests can add tracks"],
-  ["Joining", "Six characters. No account needed"],
-  ["Works on", "Phones and laptops, right in the browser"],
+const FEATURES: { icon: GlassIconName; tone: GlassTone; title: string; body: string }[] = [
+  { icon: "music", tone: "sunset", title: "Plays", body: "Audio files you upload, YouTube videos and whole playlists." },
+  { icon: "list", tone: "tide", title: "Queue", body: "One shared queue, with shuffle and repeat." },
+  { icon: "message", tone: "ember", title: "Talk", body: "A chat that sits next to the music." },
+  { icon: "crown", tone: "ink", title: "Control", body: "The host decides whether guests can add tracks." },
+  { icon: "hash", tone: "bloom", title: "Joining", body: "Six characters. No account needed." },
+  { icon: "devices", tone: "grove", title: "Works on", body: "Phones and laptops, right in the browser." },
 ];
 
 /**
  * The projectblue.cc front page during the private beta: explains the
  * product and collects access requests. Invited people start rooms at
  * /start; beta.projectblue.cc redirects here (see next.config.ts).
- * Liquid glass throughout, via @samasante/liquid-glass.
+ * Liquid glass on the icons and nav via @samasante/liquid-glass.
  */
 export const ApexLanding = () => {
   return (
     <div className="pb-lg">
       <header className="pb-lg-header">
-        <GlassBar className="pb-lg-nav">
-          <div className="pb-lg-nav-inner">
-            <WordMark asLink />
-            <span className="pb-lg-beta">Beta</span>
-            <nav className="pb-lg-links" aria-label="Sections">
-              <a href="#how">How it works</a>
-              <a href="#room">In a room</a>
-              <a href="#request">Invite</a>
-            </nav>
-            <span className="pb-lg-spacer" aria-hidden />
-            <Link href="/start" className="pb-lg-pill pb-lg-pill--hide-sm">
-              Start a room
-            </Link>
-            <a href="#request" className="pb-lg-pill pb-lg-pill--solid">
-              Request an invite
-            </a>
-            <ThemeToggle variant="icon" />
-          </div>
-        </GlassBar>
+        <GlassCapsule className="pb-lg-capsule">
+          <WordMark asLink />
+          <span className="pb-lg-beta">Beta</span>
+          <nav className="pb-lg-links" aria-label="Sections">
+            <a href="#how">How it works</a>
+            <a href="#room">In a room</a>
+            <a href="#request">Invite</a>
+          </nav>
+          <span className="pb-lg-spacer" aria-hidden />
+          <Link href="/start" className="pb-lg-pill pb-lg-hide-sm">
+            Start a room
+          </Link>
+          <a href="#request" className="pb-lg-pill pb-lg-pill--solid">
+            <span className="pb-lg-long">Request an invite</span>
+            <span className="pb-lg-short">Get an invite</span>
+          </a>
+          <ThemeToggle variant="icon" />
+        </GlassCapsule>
       </header>
 
       <main id="main">
         <section className="pb-lg-hero" aria-labelledby="pb-lg-title">
-          <LiquidHero />
-          <SyncPanels />
+          <div className="pb-lg-hero-icons" aria-hidden>
+            {HERO_ICONS.map(([icon, tone], i) => (
+              <span
+                key={icon}
+                className="pb-lg-float"
+                style={{ "--i": i } as React.CSSProperties}
+              >
+                <GlassIcon icon={icon} tone={tone} size="xl" />
+              </span>
+            ))}
+          </div>
+
+          <h1 id="pb-lg-title" className="pb-lg-title">
+            Same song.
+            <br />
+            Same second<span className="pb-lg-dot">.</span>
+          </h1>
+          <p className="pb-lg-sub">
+            Listen to the same audio at the same moment, wherever you are.
+            Share six characters, press play once.
+          </p>
+
+          <p className="pb-lg-chip">
+            <span className="pb-lg-faint">projectblue.cc/room/</span>
+            <strong>4ED678</strong>
+          </p>
+
+          <div className="pb-lg-cta">
+            <a href="#request" className="pb-lg-pill pb-lg-pill--solid pb-lg-pill--lg">
+              Request an invite
+            </a>
+            <Link href="/start" className="pb-lg-pill pb-lg-pill--lg">
+              I have an invite
+            </Link>
+          </div>
         </section>
 
         <section id="how" className="pb-lg-section" aria-labelledby="pb-lg-how">
@@ -90,13 +134,15 @@ export const ApexLanding = () => {
             <br />
             No sign&#8209;up.
           </h2>
-          <ol className="pb-lg-steps">
+          <ol className="pb-lg-grid pb-lg-grid--steps">
             {STEPS.map((s, i) => (
-              <li key={s.title}>
-                <GlassWindow title={`Step ${i + 1}`}>
-                  <h3 className="pb-lg-step-title">{s.title}</h3>
-                  <p className="pb-lg-step-body">{s.body}</p>
-                </GlassWindow>
+              <li key={s.title} className="pb-lg-card">
+                <span className="pb-lg-card-num" aria-hidden>
+                  0{i + 1}
+                </span>
+                <GlassIcon icon={s.icon} tone={s.tone} />
+                <h3 className="pb-lg-card-title">{s.title}</h3>
+                <p className="pb-lg-card-body">{s.body}</p>
               </li>
             ))}
           </ol>
@@ -109,16 +155,17 @@ export const ApexLanding = () => {
             <br />
             Nothing else.
           </h2>
-          <GlassWindow title="Room details" className="pb-lg-window--details">
-            <dl className="pb-lg-details">
-              {ROOM_DETAILS.map(([k, v]) => (
-                <div key={k}>
-                  <dt>{k}</dt>
-                  <dd>{v}</dd>
+          <ul className="pb-lg-grid pb-lg-grid--features">
+            {FEATURES.map((f) => (
+              <li key={f.title} className="pb-lg-card pb-lg-card--row">
+                <GlassIcon icon={f.icon} tone={f.tone} size="sm" />
+                <div>
+                  <h3 className="pb-lg-card-title">{f.title}</h3>
+                  <p className="pb-lg-card-body">{f.body}</p>
                 </div>
-              ))}
-            </dl>
-          </GlassWindow>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section id="request" className="pb-lg-section" aria-labelledby="pb-lg-request">
@@ -130,9 +177,13 @@ export const ApexLanding = () => {
             We&apos;re letting people in a few at a time. Leave your email and
             we&apos;ll send you an invite code when a spot opens.
           </p>
-          <GlassWindow title="Request an invite" className="pb-lg-window--form">
+          <div className="pb-lg-card pb-lg-card--form">
+            <div className="pb-lg-card-head">
+              <GlassIcon icon="mail" tone="ink" size="sm" />
+              <span>Request an invite</span>
+            </div>
             <BetaRequestForm startExpanded />
-          </GlassWindow>
+          </div>
         </section>
       </main>
 
