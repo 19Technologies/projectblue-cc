@@ -56,13 +56,15 @@ export default function RootLayout({
       <head>
         <FaviconLinks />
         {/* Boot the saved theme (or prefers-color-scheme) before paint
-            so we don't flash the wrong palette. */}
+            so we don't flash the wrong palette. The landing is dark-first:
+            light only if the visitor chose it. */}
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `
               try {
                 var t = localStorage.getItem('pb-theme');
+                if (!t && location.pathname === '/') t = 'dark';
                 if (!t && window.matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
                 if (!t) t = 'light';
                 document.documentElement.setAttribute('data-theme', t);

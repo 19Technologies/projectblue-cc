@@ -46,7 +46,13 @@ const KNOWN_SOCIALS: SocialIconMeta[] = [
 
 type LinkMap = Record<string, string>;
 
-export const Footer = () => {
+interface FooterProps {
+  /** Small leading text, e.g. a version stamp. */
+  note?: React.ReactNode;
+  showThemeToggle?: boolean;
+}
+
+export const Footer = ({ note, showThemeToggle = true }: FooterProps) => {
   // Hydrate with the build-time defaults so the first paint isn't empty;
   // /api/links overrides with admin-edited values when it arrives.
   const [links, setLinks] = useState<LinkMap>(() => ({ ...SOCIAL_LINKS }));
@@ -72,6 +78,7 @@ export const Footer = () => {
 
   return (
     <footer className="pb-welcome-footer">
+      {note && <span className="pb-footer-note">{note}</span>}
       <Link href="/terms" className="pb-footer-link">
         Terms
       </Link>
@@ -98,7 +105,7 @@ export const Footer = () => {
       ))}
 
       <span className="pb-footer-spacer" aria-hidden />
-      <ThemeToggle />
+      {showThemeToggle && <ThemeToggle />}
     </footer>
   );
 };

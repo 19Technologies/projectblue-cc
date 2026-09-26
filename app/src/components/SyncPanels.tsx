@@ -1,19 +1,11 @@
 "use client";
 
-import { Pause, Play } from "lucide-react";
+import { Pause, Play, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { GlassWindow } from "./GlassWindow";
 
 const DURATION = 228; // 3:48
 const START_AT = 102; // 1:42
-
-/* One waveform, shared by every row — it's the same song for everyone.
-   Rounded so server and browser engines produce identical markup. */
-const WAVE = Array.from({ length: 64 }, (_, i) => {
-  const v =
-    Math.abs(Math.sin(i * 0.37) * Math.cos(i * 0.11)) * 0.7 +
-    Math.abs(Math.sin(i * 1.7)) * 0.3;
-  return Math.round((0.18 + v * 0.82) * 100);
-});
 
 interface Friend {
   name: string;
@@ -63,19 +55,17 @@ interface Row {
   name: string;
   place: string;
   clock: string;
-  isYou: boolean;
 }
 
 const buildRows = (now: Date | null, viewerZone: string | null): Row[] => {
   if (!now) {
     return [
-      { key: "you", name: "You", place: "right here", clock: "--:--", isYou: true },
+      { key: "you", name: "You", place: "right here", clock: "--:--" },
       ...FRIENDS.slice(0, 3).map((f) => ({
         key: f.timeZone,
         name: f.name,
         place: f.city,
         clock: "--:--",
-        isYou: false,
       })),
     ];
   }
@@ -85,13 +75,7 @@ const buildRows = (now: Date | null, viewerZone: string | null): Row[] => {
     ? viewerZone.split("/").pop()!.replace(/_/g, " ")
     : "right here";
   const rows: Row[] = [
-    {
-      key: "you",
-      name: "You",
-      place: `${city}, ${moodFor(you.hour)}`,
-      clock: you.label,
-      isYou: true,
-    },
+    { key: "you", name: "You", place: `${city}, ${moodFor(you.hour)}`, clock: you.label },
   ];
 
   // Three friends, each on a different local time from you and each other.
@@ -106,26 +90,28 @@ const buildRows = (now: Date | null, viewerZone: string | null): Row[] => {
       name: f.name,
       place: `${f.city}, ${moodFor(t.hour)}`,
       clock: t.label,
-      isYou: false,
     });
   }
   return rows;
 };
 
-const Wave = ({ className }: { className: string }) => (
-  <div className={`pb-wave ${className}`} aria-hidden>
-    {WAVE.map((h, i) => (
-      <span key={i} style={{ height: `${h}%` }} />
-    ))}
+const Track = ({ fraction }: { fraction: number }) => (
+  <div
+    className="pb-lg-track"
+    style={{ "--f": fraction.toFixed(4) } as React.CSSProperties}
+    aria-hidden
+  >
+    <span className="pb-lg-track-fill" />
+    <span className="pb-lg-track-thumb" />
   </div>
 );
 
 /**
- * The landing-page demo: the visitor's real local time next to three
- * friends in other cities, all on the same second of the same song.
- * Pause stops it for "everyone", which is the product in one button.
+ * The hero's two floating windows: the room, and everyone in it. Each listener
+ * is a slider, and every thumb sits on the same second — the visitor's real
+ * local time on top, three friends in other cities below.
  */
-export const SyncBoard = () => {
+export const SyncPanels = () => {
   const [now, setNow] = useState<Date | null>(null);
   const [viewerZone, setViewerZone] = useState<string | null>(null);
   const [pos, setPos] = useState(START_AT);
@@ -155,70 +141,72 @@ export const SyncBoard = () => {
   const fraction = pos / DURATION;
 
   return (
-    <figure
-      className={`pb-sync${playing ? "" : " is-paused"}${pos === 0 ? " is-wrapping" : ""}`}
-      style={
-        {
-          "--pb-sync-p": `${(fraction * 100).toFixed(3)}%`,
-          "--pb-sync-f": fraction.toFixed(5),
-        } as React.CSSProperties
-      }
-    >
-      <div className="pb-sync-deck">
-        <p className="pb-sync-stamp">
-          <span className="pb-sync-code">4ED678</span>
-          <span className="pb-room-dot is-live" aria-hidden />
-          <span>{rows.length} listening</span>
-        </p>
+    <div className={`pb-lg-panels${pos === 0 ? " is-wrapping" : ""}`}>
+      <GlassWindow title="Room" className="pb-lg-window--room">
+        <p className="pb-lg-section-label">Room</p>
+        <dl className="pb-lg-facts">
+          <div>
+            <dt>Code</dt>
+            <dd className="pb-lg-mono">4ED678</dd>
+          </div>
+          <div>
+            <dt>Listening</dt>
+            <dd className="pb-lg-mono">{rows.length}</dd>
+          </div>
+          <div>
+            <dt>Track</dt>
+            <dd>Your song here</dd>
+          </div>
+          <div>
+            <dt>Position</dt>
+            <dd className="pb-lg-mono">
+              {mmss(pos)} <span className="pb-lg-faint">/ {mmss(DURATION)}</span>
+            </dd>
+          </div>
+        </dl>
+        <Track fraction={fraction} />
+      </GlassWindow>
 
-        <p className="pb-sync-label">
-          <span className={`pb-playing-bars${playing ? "" : " is-paused"}`} aria-hidden>
-            <span />
-            <span />
-            <span />
-          </span>
+      <GlassWindow title="Listeners" className="pb-lg-window--listeners">
+        <p className="pb-lg-section-label">
           {playing ? "Playing for everyone" : "Paused for everyone"}
         </p>
-
-        <p className="pb-sync-time" aria-hidden>
-          {mmss(pos)}
-          <span className="pb-sync-dur"> / {mmss(DURATION)}</span>
-        </p>
-        <p className="pb-sync-track">Your song here.</p>
-
-        <button
-          type="button"
-          className="pb-sync-btn"
-          onClick={() => setPlaying((p) => !p)}
-        >
-          {playing ? <Pause size={16} strokeWidth={2.5} aria-hidden /> : <Play size={16} strokeWidth={2.5} aria-hidden />}
-          {playing ? "Pause for everyone" : "Play for everyone"}
-        </button>
-      </div>
-
-      <div className="pb-sync-board">
-        <ul className="pb-sync-list" aria-label="People in this room">
+        <ul className="pb-lg-listeners">
           {rows.map((r) => (
-            <li key={r.key} className={`pb-sync-row${r.isYou ? " is-you" : ""}`}>
-              <div className="pb-sync-who">
-                <span className="pb-sync-name">{r.name}</span>
-                <span className="pb-sync-place">{r.place}</span>
+            <li key={r.key}>
+              <div className="pb-lg-listener-head">
+                <span className="pb-lg-listener-name">{r.name}</span>
+                <time className="pb-lg-mono">{r.clock}</time>
               </div>
-              <div className="pb-sync-lane">
-                <Wave className="is-base" />
-                <Wave className="is-played" />
-              </div>
-              <time className="pb-sync-clock">{r.clock}</time>
+              <span className="pb-lg-listener-place">{r.place}</span>
+              <Track fraction={fraction} />
             </li>
           ))}
         </ul>
-        <div className="pb-sync-line" aria-hidden />
-      </div>
-
-      <figcaption className="pb-sync-caption">
-        Those local times are real, and the top one is yours. Different hours,
-        different days, the same second of the same song.
-      </figcaption>
-    </figure>
+        <div className="pb-lg-window-actions">
+          <button
+            type="button"
+            className="pb-lg-btn"
+            onClick={() => setPlaying((p) => !p)}
+            aria-label={playing ? "Pause for everyone" : "Play for everyone"}
+          >
+            {playing ? <Pause size={14} aria-hidden /> : <Play size={14} aria-hidden />}
+            {playing ? "Pause" : "Play"}
+          </button>
+          <button
+            type="button"
+            className="pb-lg-btn pb-lg-btn--quiet"
+            onClick={() => setPos(0)}
+            aria-label="Restart the song for everyone"
+          >
+            <RotateCcw size={14} aria-hidden />
+            Restart
+          </button>
+        </div>
+        <p className="pb-lg-window-note">
+          Those local times are real. The top one is yours.
+        </p>
+      </GlassWindow>
+    </div>
   );
 };
